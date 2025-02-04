@@ -11,11 +11,11 @@ import { useEffect, useState } from "react";
 import SidenavSheet from "./SidenavSheet";
 import { User } from "lucide-react";
 import { useCurrentUser } from "@/contexts/CurrentUserContext";
-
+import Cart from "./Cart";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
-  
+
   const { systemTheme, theme } = useTheme();
 
   const currentTheme = theme === "system" ? systemTheme : theme;
@@ -34,15 +34,14 @@ const Header = () => {
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <SidenavSheet />
 
-          <Link href="/" className="flex items-center">
-            <Image
-              src={currentTheme === "light" ? nextLight : nextDark}
-              className="mr-3 h-6"
-              alt="Next Js Logo"
-            />
+          <Link href="/" className="flex items-center text-[#F5A09B]">
+          Micael e Agata
           </Link>
+
           <div className="flex items-center lg:order-2 space-x-2">
             <ThemeSwitcherDropdown />
+
+            <Cart />
 
             {currentUser ? (
               <div
@@ -57,31 +56,50 @@ const Header = () => {
               </div>
             ) : (
               <Link href="/sign-in">
-                <Button className="ml-2 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white">
+                <Button className="ml-2 bg-blue-700 hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 text-white hidden lg:block">
                   Entrar
                 </Button>
               </Link>
             )}
           </div>
+
           <div className="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1">
             <ul className="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
-              <li>
-                <Link href="/" className="navbar-link" aria-current="page">
-                  Inicio
-                </Link>
-              </li>
-              <li>
-                <Link href="/auth/admin/create-product" className="navbar-link">
-                  Listar Produto
-                </Link>
-              </li>
-              <li>
-                <Link href="/auth/admin" className="navbar-link">
-                  Admin
-                </Link>
-              </li>
+              {currentUser?.isAdmin && (
+                <>
+                  <li>
+                    <Link href="/auth/admin/create-product" className="navbar-link">
+                      Listar Produtos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/auth/admin" className="navbar-link">
+                      Admin
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
+        </div>
+
+        <div className="block lg:hidden mt-2">
+          <ul className="flex flex-col space-y-2">
+            {currentUser?.Admin && (
+              <>
+                <li>
+                  <Link href="/auth/admin/create-product" className="navbar-link">
+                    Listar Produtos
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/auth/admin" className="navbar-link">
+                    Admin
+                  </Link>
+                </li>
+              </>
+            )}
+          </ul>
         </div>
       </nav>
     </header>

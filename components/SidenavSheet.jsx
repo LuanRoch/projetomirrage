@@ -16,7 +16,7 @@ const SidenavSheet = () => {
       </SheetTrigger>
       <SheetContent side="left">
         <SheetHeader className="mb-8">
-          <SheetTitle>Next.Js</SheetTitle>
+          <SheetTitle></SheetTitle>
         </SheetHeader>
 
         <ul className="space-y-2">
