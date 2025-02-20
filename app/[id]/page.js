@@ -19,7 +19,7 @@ const Product = ({ params }) => {
       const response = await fetch(`/api/products/${id}`);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Erro HTTP! status: ${response.status}`);
       }
 
       const data = await response.json();
@@ -28,7 +28,7 @@ const Product = ({ params }) => {
 
       return data;
     } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
+      console.error("Ocorreu um problema durante a operação:", error);
     } finally {
       setLoading(false);
     }
@@ -48,9 +48,12 @@ const Product = ({ params }) => {
 
   if (!product && !loading) {
     return (
-      <div>
-        <h1 className="text-3xl font-bold">Product not found!</h1>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <h1 className="text-3xl font-bold text-gray-700">
+          Produto não encontrado!
+        </h1>
       </div>
+
     );
   }
 
@@ -73,7 +76,7 @@ const Product = ({ params }) => {
               </div>
 
               <p className="font-medium text-gray-900 dark:text-gray-50 mt-4">
-                ${product.price} USD
+                R${product.price.toFixed(2).replace(".", ",")} BRL
               </p>
             </section>
           </div>
@@ -87,7 +90,7 @@ const Product = ({ params }) => {
                     loading="eager"
                     className="-z-10 h-full w-full object-cover object-center"
                     src={product.image}
-                    alt="Product image"
+                    alt="Imagem do produto"
                     objectFit="contain"
                   />
                 </div>
@@ -96,7 +99,7 @@ const Product = ({ params }) => {
           </div>
 
           <div className="mt-10">
-          <AddToCartButton product={product} />
+            <AddToCartButton product={product} />
           </div>
         </div>
       </div>

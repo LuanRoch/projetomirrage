@@ -5,64 +5,24 @@ import { cn } from "@/lib/utils";
 import { Minus, Plus, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react"; // Importe o useState para gerenciar o estado de carregamento
+import { useState } from "react";
+import { CheckoutButton } from "@/components/CheckoutButton"; 
 
 const CartPage = () => {
   const { items, removeItem, increaseQuantity, decreaseQuantity, clearCart } =
     useCart();
-  const [isLoading, setIsLoading] = useState(false); // Estado para controlar o carregamento
+  const [isLoading, setIsLoading] = useState(false);
 
   const cartTotal = items.reduce(
     (total, { product, quantity }) => total + product.price * quantity,
     0
   );
 
-  // Função para processar o checkout
-  const handleCheckout = async () => {
-    setIsLoading(true); // Ativa o estado de carregamento
-
-    try {
-      // Formata os itens do carrinho para o formato esperado pela API do Mercado Pago
-      const formattedItems = items.map(({ product, quantity }) => ({
-        name: product.title,
-        price: product.price,
-        quantity: quantity,
-      }));
-
-      // Dados do comprador (você pode coletar isso de um formulário ou usar um valor fixo para testes)
-      const payer = {
-        email: "cliente@example.com", // Substitua pelo e-mail do cliente
-      };
-
-      // Envia os dados para a API de pagamento
-      const response = await fetch("/api/payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ items: formattedItems, payer }),
-      });
-
-      const data = await response.json();
-
-      // Redireciona o usuário para a página de pagamento do Mercado Pago
-      if (data.id) {
-        window.location.href = `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=${data.id}`;
-      } else {
-        console.error("Erro ao criar o pagamento:", data);
-      }
-    } catch (error) {
-      console.error("Erro durante o checkout:", error);
-    } finally {
-      setIsLoading(false); // Desativa o estado de carregamento
-    }
-  };
-
   return (
     <div>
       <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Shopping Cart
+          Carrinho de Compras
         </h1>
 
         <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
@@ -72,7 +32,7 @@ const CartPage = () => {
                 items.length === 0,
             })}
           >
-            <h2 className="sr-only">Items no carrinho</h2>
+            <h2 className="sr-only">Itens no carrinho</h2>
 
             {items.length === 0 ? (
               <div className="flex flex-col h-full items-center justify-center space-y-1">
@@ -84,13 +44,13 @@ const CartPage = () => {
                     src="/empty-cart.svg"
                     fill
                     loading="eager"
-                    alt="Empty shopping cart"
+                    alt="Carrinho de compras vazio"
                   />
                 </div>
 
                 <h3 className="font-semibold text-2xl">Seu carrinho está vazio</h3>
 
-                <p className="text-muted-foreground text-center">opss</p>
+                <p className="text-muted-foreground text-center">Ops!</p>
               </div>
             ) : null}
 
@@ -108,7 +68,7 @@ const CartPage = () => {
                         <Image
                           fill
                           src={product.image}
-                          alt="product image"
+                          alt="Imagem do produto"
                           className="h-full w-full rounded-md object-cover object-center sm:h-48 sm:w-48"
                         />
                       </div>
@@ -130,14 +90,14 @@ const CartPage = () => {
                           </div>
 
                           <p className="mt-1 text-sm font-medium text-gray-900 dark:text-gray-50">
-                            ${product.price * quantity} USD
+                            R${(product.price * quantity).toFixed(2)} BRL
                           </p>
                         </div>
 
                         <div className="mt-4 sm:mt-0 sm:pr-9 w-20">
                           <div className="absolute right-0 top-0">
                             <Button
-                              aria-label="Remove product"
+                              aria-label="Aumentar quantidade"
                               onClick={() => increaseQuantity(product.id)}
                               variant="ghost"
                             >
@@ -147,7 +107,7 @@ const CartPage = () => {
 
                           <div className="absolute right-0 top-10">
                             <Button
-                              aria-label="Remove product"
+                              aria-label="Diminuir quantidade"
                               onClick={() => decreaseQuantity(product.id)}
                               variant="ghost"
                             >
@@ -157,7 +117,7 @@ const CartPage = () => {
 
                           <div className="absolute right-0 top-20">
                             <Button
-                              aria-label="Remove product"
+                              aria-label="Remover produto"
                               onClick={() => removeItem(product.id)}
                               variant="ghost"
                             >
@@ -175,7 +135,7 @@ const CartPage = () => {
 
           <section className="mt-16 rounded-lg bg-gray-50 dark:bg-zinc-800 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
             <h2 className="text-lg font-medium text-gray-900 dark:text-gray-50">
-              Order Summary
+              Resumo do Pedido
             </h2>
 
             <div className="mt-6 space-y-4">
@@ -184,40 +144,40 @@ const CartPage = () => {
                   Subtotal
                 </p>
                 <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
-                  ${cartTotal} USD
+                  R${cartTotal.toFixed(2)} BRL
                 </p>
               </div>
 
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <div className="flex items-center text-sm text-muted-foreground">
-                  <span>Flat Transaction Fee</span>
+                  <span>Taxa de transação</span>
                 </div>
 
                 <div className="text-sm font-medium text-gray-900 dark:text-gray-50">
-                  $1 USD
+                  R$1,00 BRL
                 </div>
               </div>
 
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <div className="text-base font-medium text-gray-900 dark:text-gray-50">
-                  Order Total
+                  Total do Pedido
                 </div>
 
                 <div className="text-base font-medium text-gray-900 dark:text-gray-50">
-                  ${cartTotal + 1} BRL
+                  R${(cartTotal + 1).toFixed(2)} BRL
                 </div>
               </div>
             </div>
 
             <div className="mt-6">
-              <Button
-                disabled={items.length === 0 || isLoading} // Desabilita o botão se o carrinho estiver vazio ou estiver carregando
-                className="w-full"
-                size="lg"
-                onClick={handleCheckout} // Adiciona a função de checkout ao botão
-              >
-                {isLoading ? "Processando..." : "Checkout"} {/* Altera o texto do botão durante o carregamento */}
-              </Button>
+              {/* Substitua o Button pelo CheckoutButton */}
+              <CheckoutButton
+                cartItems={items.map((item) => ({
+                  title: item.product.title,
+                  price: item.product.price,
+                  quantity: item.quantity,
+                }))}
+              />
             </div>
           </section>
         </div>

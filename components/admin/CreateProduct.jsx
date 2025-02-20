@@ -28,7 +28,7 @@ const CreateProduct = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`Erro HTTP! status: ${response.status}`);
       }
 
       const data = await response.json();
@@ -45,7 +45,7 @@ const CreateProduct = () => {
 
       return data;
     } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
+      console.error("Ocorreu um erro durante a operação:", error);
     }
   };
 
@@ -53,7 +53,7 @@ const CreateProduct = () => {
     <section>
       <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
         <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
-          Listar produto
+          Cadastrar Produto
         </h1>
 
         {errorMsg ? (
@@ -61,8 +61,7 @@ const CreateProduct = () => {
             className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50"
             role="alert"
           >
-            <span className="font-medium">Error:</span>
-            {errorMsg}
+            <span className="font-medium">Erro:</span> {errorMsg}
           </div>
         ) : undefined}
 
@@ -73,7 +72,7 @@ const CreateProduct = () => {
                 htmlFor="title"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Titulo do presente
+                Título do Produto
               </Label>
 
               <Input
@@ -83,7 +82,7 @@ const CreateProduct = () => {
                 value={title}
                 onChange={(event) => setTitle(event.target.value)}
                 className="input"
-                placeholder="Title"
+                placeholder="Digite o título do produto"
                 required
               />
             </div>
@@ -103,7 +102,7 @@ const CreateProduct = () => {
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
                 className="input"
-                placeholder="Description"
+                placeholder="Digite a descrição do produto"
                 required
               />
             </div>
@@ -123,7 +122,7 @@ const CreateProduct = () => {
                 value={price}
                 onChange={(event) => setPrice(event.target.value)}
                 className="input"
-                placeholder="Price"
+                placeholder="Digite o preço do produto"
                 required
               />
             </div>
@@ -133,7 +132,7 @@ const CreateProduct = () => {
                 htmlFor="image"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Imagem
+                URL da Imagem
               </Label>
 
               <Input
@@ -143,14 +142,14 @@ const CreateProduct = () => {
                 value={image}
                 onChange={(event) => setImage(event.target.value)}
                 className="input"
-                placeholder="Image"
+                placeholder="Cole a URL da imagem do produto"
                 required
               />
             </div>
           </div>
 
           <Button onClick={handleSubmit} className="btn mt-6">
-            Listar produto
+            Cadastrar Produto
           </Button>
         </div>
       </div>

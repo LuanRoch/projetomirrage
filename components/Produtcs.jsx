@@ -29,11 +29,11 @@ const Products = () => {
   }, []);
 
   return (
-    <div className="bg-white mt-4 grid gap-12 sm:grid-cols-1 lg:grid-cols-1 border-radius: 30px;">
-      {products.map((product) => {
-        return <ProductItem key={product.id} product={product} />;
-      })}
-    </div>
+    <div className="bg-white mt-4 grid gap-12 md:w-1/2 sm:grid-cols-1 lg:grid-cols-1 rounded-xl  p-4">
+    {products.map((product) => {
+      return <ProductItem key={product.id} product={product} />;
+    })}
+  </div>
   );
 };
 

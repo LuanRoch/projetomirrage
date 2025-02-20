@@ -25,7 +25,7 @@ const Cart = () => {
     0
   );
 
-  const fee = 1;
+  const fee = 1; // Taxa de transação
 
   return (
     <Sheet>
@@ -38,7 +38,7 @@ const Cart = () => {
 
       <SheetContent className="flex w-full flex-col pr-0 sm:max-w-lg">
         <SheetHeader className="space-y-2.5 pr-6">
-          <SheetTitle>Cart ({itemCount})</SheetTitle>
+          <SheetTitle>Carrinho ({itemCount})</SheetTitle>
         </SheetHeader>
 
         {itemCount > 0 ? (
@@ -60,25 +60,27 @@ const Cart = () => {
 
               <div className="space-y-1.5 text-sm">
                 <div className="flex">
-                  <span className="flex-1">Shipping</span>
-                  <span>Free</span>
+                  <span className="flex-1">Frete</span>
+                  <span>Grátis</span>
                 </div>
 
                 <div className="flex">
-                  <span className="flex-1">Transaction Fee</span>
-                  <span>${fee} USD</span>
+                  <span className="flex-1">Taxa de transação</span>
+                  <span>R${fee.toFixed(2).replace(".", ",")} BRL</span>
                 </div>
 
                 <div className="flex">
                   <span className="flex-1">Total</span>
-                  <span>${cartTotal + fee} USD</span>
+                  <span>
+                    R${(cartTotal + fee).toFixed(2).replace(".", ",")} BRL
+                  </span>
                 </div>
               </div>
 
               <SheetFooter>
                 <SheetTrigger asChild>
                   <Link href="/cart">
-                    <Button className="w-full">Continue to checkout</Button>
+                    <Button className="w-full">Finalizar compra</Button>
                   </Link>
                 </SheetTrigger>
               </SheetFooter>
@@ -93,16 +95,16 @@ const Cart = () => {
               <Image
                 src="/empty-cart.svg"
                 fill
-                alt="Empty shopping cart image"
+                alt="Imagem de carrinho vazio"
               />
             </div>
 
-            <div className="text-xl font-semibold">Your cart is empty</div>
+            <div className="text-xl font-semibold">Seu carrinho está vazio</div>
 
             <SheetTrigger asChild>
               <Link href="/">
                 <Button variant="link" size="sm">
-                  Add items to your cart to checkout
+                  Adicione itens ao carrinho para finalizar a compra
                 </Button>
               </Link>
             </SheetTrigger>

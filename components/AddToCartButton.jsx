@@ -24,7 +24,7 @@ const AddToCartButton = ({ product }) => {
       size="lg"
       className="w-full"
     >
-      {isSuccess ? "Added!" : "Add to cart"}
+      {isSuccess ? "Adicionado!" : "Adicionar ao carrinho"}
     </Button>
   );
 };
