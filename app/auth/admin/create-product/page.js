@@ -1,4 +1,4 @@
-import CreateProduct from "@/components/admin/CreateProduct";
+import CreateProduct from "@/components/Admin/CreateProduct";
 
 export default function Home() {
   return <CreateProduct />;
