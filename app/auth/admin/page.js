@@ -1,7 +1,4 @@
 "use client";
-import AreaChartComponent from "@/components/Admin/AreaChartComponent";
-import BarChartComponent from "@/components/Admin/BarChartComponent";
-import PieChartComponent from "@/components/Admin/PieChartComponent";
 import { useCurrentUser } from "@/contexts/CurrentUserContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
