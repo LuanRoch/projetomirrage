@@ -14,7 +14,7 @@ const CartItem = ({ product, quantity }) => {
               src={product.image}
               alt={product.title}
               fill
-              className="absolute object-cover"
+              className="absolute object-cover rounded-lg"
             />
           </div>
 

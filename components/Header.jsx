@@ -1,12 +1,8 @@
 "use client";
-import nextDark from "@/public/next-dark.svg";
-import nextLight from "@/public/next-light.svg";
+
 import { useTheme } from "next-themes";
-import Image from "next/image";
 import { deleteCookie } from "cookies-next/client";
 import Link from "next/link";
-import ThemeSwitcherDropdown from "./ThemeSwitcherDropdown";
-import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import SidenavSheet from "./SidenavSheet";
 import { User } from "lucide-react";
@@ -15,6 +11,7 @@ import Cart from "./Cart";
 
 const Header = () => {
   const [mounted, setMounted] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
 
   const { systemTheme, theme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
@@ -22,28 +19,40 @@ const Header = () => {
 
   useEffect(() => {
     setMounted(true);
+
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   if (!mounted) return null;
 
   return (
-    <header>
+    <header className={isSticky ? "sticky" : ""}>
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <SidenavSheet />
-
-          {/* Link centralizado com fonte estilizada */}
           <div className="flex-grow text-center">
             <Link
               href="/"
-              className="text-[#F5A09B] text-2xl font-customRomantic font-bold tracking-wide"
+              className="text-[#F5A09B] text-2xl font-great-vibes font-bold tracking-wide"
+              style={{ fontFamily: "var(--font-great-vibes)" }}
             >
               Micael e Agata
             </Link>
           </div>
 
           <div className="flex items-center lg:order-2 space-x-2">
-            
             <Cart />
             {currentUser ? (
               <div

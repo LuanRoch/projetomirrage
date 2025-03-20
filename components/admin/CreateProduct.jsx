@@ -11,8 +11,18 @@ const CreateProduct = () => {
   const [image, setImage] = useState("");
   const [price, setPrice] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
+    // Validação dos campos
+    if (!title || !description || !price || !image) {
+      setErrorMsg("Todos os campos são obrigatórios.");
+      setTimeout(() => setErrorMsg(""), 4000);
+      return;
+    }
+
+    setLoading(true); // Ativa o estado de carregamento
+
     try {
       const response = await fetch("/api/products", {
         method: "POST",
@@ -22,7 +32,7 @@ const CreateProduct = () => {
         body: JSON.stringify({
           title,
           description,
-          price,
+          price: parseFloat(price), // Converte o preço para número
           image,
         }),
       });
@@ -35,121 +45,135 @@ const CreateProduct = () => {
 
       if (data.error) {
         setErrorMsg(data.error);
-
-        setTimeout(() => {
-          setErrorMsg("");
-        }, 4000);
+        setTimeout(() => setErrorMsg(""), 4000);
       } else {
+        // Limpa os campos após o cadastro bem-sucedido
+        setTitle("");
+        setDescription("");
+        setImage("");
+        setPrice("");
+
+        // Recarrega a página para atualizar a lista de produtos
         window.location.reload();
       }
-
-      return data;
     } catch (error) {
       console.error("Ocorreu um erro durante a operação:", error);
+      setErrorMsg("Erro ao cadastrar o produto. Tente novamente.");
+      setTimeout(() => setErrorMsg(""), 4000);
+    } finally {
+      setLoading(false); // Desativa o estado de carregamento
     }
   };
 
   return (
-    <section>
-      <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
-        <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
+    <section
+      className="min-h-screen flex items-center justify-center"
+      style={{ backgroundColor: "rgb(255 239 239)" }} // Cor de fundo personalizada
+    >
+      <div className="w-full max-w-2xl p-8 bg-white rounded-lg shadow-lg dark:bg-gray-700">
+        <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
           Cadastrar Produto
         </h1>
 
-        {errorMsg ? (
+        {errorMsg && (
           <div
-            className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50"
+            className="p-4 mb-6 text-sm text-red-800 bg-red-50 rounded-lg dark:bg-red-200 dark:text-red-800"
             role="alert"
           >
             <span className="font-medium">Erro:</span> {errorMsg}
           </div>
-        ) : undefined}
+        )}
 
-        <div>
-          <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-            <div className="sm:col-span-2">
-              <Label
-                htmlFor="title"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Título do Produto
-              </Label>
-
-              <Input
-                type="text"
-                name="title"
-                id="title"
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-                className="input"
-                placeholder="Digite o título do produto"
-                required
-              />
-            </div>
-
-            <div className="sm:col-span-2">
-              <Label
-                htmlFor="description"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Descrição
-              </Label>
-
-              <Input
-                type="text"
-                name="description"
-                id="description"
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
-                className="input"
-                placeholder="Digite a descrição do produto"
-                required
-              />
-            </div>
-
-            <div className="sm:col-span-2">
-              <Label
-                htmlFor="price"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Preço
-              </Label>
-
-              <Input
-                type="number"
-                name="price"
-                id="price"
-                value={price}
-                onChange={(event) => setPrice(event.target.value)}
-                className="input"
-                placeholder="Digite o preço do produto"
-                required
-              />
-            </div>
-
-            <div className="sm:col-span-2">
-              <Label
-                htmlFor="image"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                URL da Imagem
-              </Label>
-
-              <Input
-                type="text"
-                name="image"
-                id="image"
-                value={image}
-                onChange={(event) => setImage(event.target.value)}
-                className="input"
-                placeholder="Cole a URL da imagem do produto"
-                required
-              />
-            </div>
+        <div className="space-y-6">
+          <div>
+            <Label
+              htmlFor="title"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
+            >
+              Título do Produto
+            </Label>
+            <Input
+              type="text"
+              name="title"
+              id="title"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+              placeholder="Digite o título do produto"
+              required
+            />
           </div>
 
-          <Button onClick={handleSubmit} className="btn mt-6">
-            Cadastrar Produto
+          <div>
+            <Label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
+            >
+              Descrição
+            </Label>
+            <Input
+              type="text"
+              name="description"
+              id="description"
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+              placeholder="Digite a descrição do produto"
+              required
+            />
+          </div>
+
+          <div>
+            <Label
+              htmlFor="price"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
+            >
+              Preço
+            </Label>
+            <Input
+              type="number"
+              name="price"
+              id="price"
+              value={price}
+              onChange={(event) => setPrice(event.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+              placeholder="Digite o preço do produto"
+              required
+            />
+          </div>
+
+          <div>
+            <Label
+              htmlFor="image"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
+            >
+              URL da Imagem
+            </Label>
+            <Input
+              type="text"
+              name="image"
+              id="image"
+              value={image}
+              onChange={(event) => setImage(event.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+              placeholder="Cole a URL da imagem do produto"
+              required
+            />
+          </div>
+
+          <Button
+            onClick={handleSubmit}
+            className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:bg-blue-400 dark:bg-purple-600 dark:hover:bg-purple-700"
+            disabled={loading} // Desabilita o botão durante o carregamento
+          >
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <span className="ml-2">Cadastrando...</span>
+              </div>
+            ) : (
+              "Cadastrar Produto"
+            )}
           </Button>
         </div>
       </div>

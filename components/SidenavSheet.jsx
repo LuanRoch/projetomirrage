@@ -28,14 +28,6 @@ const SidenavSheet = () => {
             </li>
           </Link>
 
-          <Link href="/auth/edit-profile">
-            <li className="sidenav-li">
-              <ArrowBigRight className="sidenav-li--icon" />
-
-              <span className="ml-3">Editar Perfil</span>
-            </li>
-          </Link>
-
           <Link href="/auth/admin/create-product">
             <li className="sidenav-li">
               <ArrowBigRight className="sidenav-li--icon" />
@@ -44,7 +36,7 @@ const SidenavSheet = () => {
             </li>
           </Link>
 
-          <Link href="/auth/admin">
+          <Link href="/sign-in">
             <li className="sidenav-li">
               <ArrowBigRight className="sidenav-li--icon" />
 

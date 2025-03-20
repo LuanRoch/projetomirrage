@@ -25,7 +25,7 @@ const Cart = () => {
     0
   );
 
-  const fee = 1; // Taxa de transação
+  const fee = 0; // Taxa de transação
 
   return (
     <Sheet>
@@ -64,10 +64,10 @@ const Cart = () => {
                   <span>Grátis</span>
                 </div>
 
-                <div className="flex">
+                {/* <div className="flex">
                   <span className="flex-1">Taxa de transação</span>
                   <span>R${fee.toFixed(2).replace(".", ",")} BRL</span>
-                </div>
+                </div> */}
 
                 <div className="flex">
                   <span className="flex-1">Total</span>
