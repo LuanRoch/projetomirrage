@@ -1,0 +1,14 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "next.config.mjs",
+        "use": "@vercel/next"
+      }
+    ],
+    "build": {
+      "env": {
+        "PRISMA_GENERATE_ON_BUILD": "true"
+      }
+    }
+  }
