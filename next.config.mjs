@@ -8,7 +8,7 @@ ignoreDuringBuilds: true,
       remotePatterns: [
         {
           protocol: "https",
-          hostname: "fakestoreapi.com",
+          hostname: "",
         },
       ],
     },
