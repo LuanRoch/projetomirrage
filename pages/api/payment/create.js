@@ -25,8 +25,8 @@ export default async function handler(req, res) {
           quantity: item.quantity || 1,
         })),
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_SITE_URL}/payment/success`,
-          failure: `${process.env.NEXT_PUBLIC_SITE_URL}/payment/failure`,
+          success: `${process.env.NEXT_PUBLIC_SITE_URL}/paymentSuccess`,
+          failure: `${process.env.NEXT_PUBLIC_SITE_URL}/paymentFailure`,
           pending: `${process.env.NEXT_PUBLIC_SITE_URL}/payment/pending`,
         },
         auto_return: 'approved',

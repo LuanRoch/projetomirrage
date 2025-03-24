@@ -1,7 +1,7 @@
 "use client"; // Certifique-se de que este componente é executado no cliente
 import { useEffect, useState } from "react";
 import { loadMercadoPago } from "@mercadopago/sdk-js";
-import { cartItems } from "@/hooks/useCart"
+
 
 export function CheckoutButton({ cartItems }) {
     const [loading, setLoading] = useState(false);
@@ -44,11 +44,11 @@ export function CheckoutButton({ cartItems }) {
 
     return (
         <button
-            onClick={handleCheckout}
-            disabled={loading || cartItems.length === 0}
-            className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-            {loading ? "Processando..." : "Finalizar Compra"}
-        </button>
+        onClick={handleCheckout}
+        disabled={loading || cartItems.length === 0}
+        className="w-full bg-primary text-primary-foreground py-2 px-4 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90"
+    >
+        {loading ? "Processando..." : "Finalizar Compra"}
+    </button>
     );
 }
