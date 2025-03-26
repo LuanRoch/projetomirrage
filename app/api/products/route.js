@@ -5,71 +5,52 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
+// POST - Criar produto (Admin)
 export async function POST(request) {
-  const body = await request.json();
-
-  const { title, description, price, image } = body;
-
-  if (!title || !description || !price || !image) {
-    return NextResponse.json(
-      { error: "You must fill all the required fields!" },
-      { status: 200 }
-    );
-  }
-
   try {
-    const tokenCookie = await cookies();
-    const getToken = tokenCookie.get("token");
+    const body = await request.json();
+    const { title, description, price, image } = body;
 
-    if (getToken) {
-      const token = jwt.verify(getToken.value, "appSecret");
-
-      const userId = token.id;
-
-      if (!userId) {
-        return NextResponse.json(
-          { error: "Unauthorized request!" },
-          { status: 200 }
-        );
-      }
-
-      const user = await prisma.user.findUnique({ where: { id: userId } });
-
-      if (!user) {
-        return NextResponse.json(
-          { error: "Unauthorized request!" },
-          { status: 200 }
-        );
-      }
-
-      if (user.role !== "ADMIN") {
-        return NextResponse.json(
-          { error: "Unauthorized request!" },
-          { status: 200 }
-        );
-      }
-
-      const product = await prisma.product.create({
-        data: {
-          title,
-          description,
-          image,
-          price: parseFloat(price),
-        },
-      });
-
-      return NextResponse.json(product, { status: 201 });
+    // Validação
+    if (!title || !description || !price || !image) {
+      return NextResponse.json(
+        { error: "Preencha todos os campos!" },
+        { status: 400 }
+      );
     }
 
-    return NextResponse.json(
-      { error: "Unauthorized request!" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.log(error.message);
+    // Autenticação
+    const token = cookies().get("token")?.value;
+    if (!token) {
+      return NextResponse.json(
+        { error: "Não autorizado" },
+        { status: 401 }
+      );
+    }
 
+    const decoded = jwt.verify(token, "appSecret");
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id }
+    });
+
+    if (!user || user.role !== "ADMIN") {
+      return NextResponse.json(
+        { error: "Acesso negado" },
+        { status: 403 }
+      );
+    }
+
+    // Criação do produto
+    const product = await prisma.product.create({
+      data: { title, description, price: Number(price), image }
+    });
+
+    return NextResponse.json(product, { status: 201 });
+
+  } catch (error) {
+    console.error("Erro:", error);
     return NextResponse.json(
-      { error: "Failed to create post" },
+      { error: "Erro no servidor" },
       { status: 500 }
     );
   } finally {
@@ -77,17 +58,17 @@ export async function POST(request) {
   }
 }
 
-
+// GET - Listar produtos
 export async function GET() {
   try {
     const products = await prisma.product.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: "desc" }
     });
-
-    return NextResponse.json({ products });
+    return NextResponse.json(products);
   } catch (error) {
+    console.error("Erro:", error);
     return NextResponse.json(
-      { error: "Failed to get products" },
+      { error: "Erro ao buscar produtos" },
       { status: 500 }
     );
   } finally {

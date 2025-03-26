@@ -1,40 +1,59 @@
-import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+import { ObjectId } from 'bson';
+import prisma from '@/lib/prisma';
 
-const prisma = new PrismaClient();
-
-export async function GET(_, { params }) {
-  const { id } = params;
-
-  // Validate the ID
-  if (!id) {
-    return NextResponse.json(
-      { error: "Product ID is required" },
-      { status: 400 }
-    );
-  }
-
+export async function GET(request) {
   try {
+    // Extração segura do ID da URL (funciona em todas versões)
+    const id = request.url.split('/').pop().split('?')[0];
+
+    console.log('ID extraído:', id); // Para debug
+
+    // Validação rigorosa
+    if (!id || typeof id !== 'string' || !ObjectId.isValid(id)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "ID inválido",
+          details: "O ID deve ser um ObjectId válido do MongoDB"
+        },
+        { status: 400 }
+      );
+    }
+
+    // Consulta ao banco de dados
     const product = await prisma.product.findUnique({
-      where: { id },
+      where: { id: new ObjectId(id).toString() },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        price: true,
+        image: true
+      }
     });
 
-    // Handle case where product is not found
     if (!product) {
       return NextResponse.json(
-        { error: "Product not found" },
+        {
+          success: false,
+          error: "Produto não encontrado"
+        },
         { status: 404 }
       );
     }
 
     return NextResponse.json({ product });
+
   } catch (error) {
-    console.error("Error fetching product:", error);
+    console.error("Erro na API:", error);
     return NextResponse.json(
-      { error: "Failed to fetch product", details: error.message },
+      {
+        success: false,
+        error: "Erro interno do servidor",
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
+      },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
