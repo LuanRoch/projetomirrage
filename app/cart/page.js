@@ -148,7 +148,7 @@ const CartPage = () => {
                 </p>
               </div>
 
-              <div className="flex items-center justify-between border-t border-gray-200 pt-4">
+              {/* <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <div className="flex items-center text-sm text-muted-foreground">
                   <span>Taxa de transação</span>
                 </div>
@@ -156,7 +156,7 @@ const CartPage = () => {
                 <div className="text-sm font-medium text-gray-900 dark:text-gray-50">
                   R$1,00 BRL
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex items-center justify-between border-t border-gray-200 pt-4">
                 <div className="text-base font-medium text-gray-900 dark:text-gray-50">
@@ -164,7 +164,7 @@ const CartPage = () => {
                 </div>
 
                 <div className="text-base font-medium text-gray-900 dark:text-gray-50">
-                  R${(cartTotal + 1).toFixed(2)} BRL
+                  R${(cartTotal ).toFixed(2)} BRL
                 </div>
               </div>
             </div>
