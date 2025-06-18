@@ -87,7 +87,7 @@ Copy
 npm run dev
 Acesse a aplicação:
 
-Abra o navegador e acesse http://localhost:3000.
+Abra o navegador e acesse http://projetomirrage.vercel.app
 
 🤝 Como Contribuir
 Contribuições são bem-vindas! Se você deseja contribuir para o Projeto Mirrage, siga os passos abaixo:
